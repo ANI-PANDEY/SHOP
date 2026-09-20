@@ -6,9 +6,15 @@ const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
-connectDB();
 
 const app = express();
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+  } catch (e) {}
+  next();
+});
 
 app.use(cors({
   origin: true,
