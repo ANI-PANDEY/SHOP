@@ -49,7 +49,7 @@ app.get('/api/products', (req, res) => {
 });
 
 // Fallback JSON handler for missing API endpoints to prevent HTML <!DOCTYPE responses
-app.use('/api/*', (req, res) => {
+app.use('/api', (req, res) => {
   res.status(404).json({ message: `Endpoint ${req.originalUrl} not found` });
 });
 
