@@ -8,13 +8,36 @@ const Cart = () => {
   const { cartItems, updateQty, removeFromCart, deliveryType, setDeliveryType, getCartTotal } = useCartStore();
   const totals = getCartTotal();
 
-  const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    phone: '',
-    address: 'Gulzarbagh Station Road Area, Patna City',
-    landmark: 'Near Station Road',
-    pincode: '800007'
+  const [customerInfo, setCustomerInfo] = useState(() => {
+    try {
+      const saved = localStorage.getItem('pandey_customer_saved_info');
+      return saved ? JSON.parse(saved) : {
+        name: '',
+        phone: '',
+        address: 'Gulzarbagh Station Road Area, Patna City',
+        landmark: 'Near Station Road',
+        pincode: '800007'
+      };
+    } catch (e) {
+      return {
+        name: '',
+        phone: '',
+        address: 'Gulzarbagh Station Road Area, Patna City',
+        landmark: 'Near Station Road',
+        pincode: '800007'
+      };
+    }
   });
+
+  const handleInputChange = (field, value) => {
+    setCustomerInfo(prev => {
+      const updated = { ...prev, [field]: value };
+      try {
+        localStorage.setItem('pandey_customer_saved_info', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
 
   const handleInstantWhatsAppOrder = (e) => {
     e.preventDefault();
@@ -25,6 +48,17 @@ const Cart = () => {
       landmark: customerInfo.landmark,
       pincode: customerInfo.pincode
     };
+
+    // Save last order summary for 1-Click WhatsApp Repeat
+    try {
+      const lastOrderData = {
+        date: new Date().toLocaleDateString(),
+        itemsCount: cartItems.length,
+        total: totals.totalPrice,
+        items: cartItems
+      };
+      localStorage.setItem('pandey_last_whatsapp_order', JSON.stringify(lastOrderData));
+    } catch (e) {}
 
     const orderDetails = {
       deliveryType: deliveryType || 'Standard Local Delivery',
@@ -106,16 +140,16 @@ const Cart = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input
                 type="text"
-                placeholder="Your Name (Optional)"
+                placeholder="Your Name (Saved automatically)"
                 value={customerInfo.name}
-                onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => handleInputChange('name', e.target.value)}
                 className="bg-slate-900 border border-slate-800 text-white text-xs px-3.5 py-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
               <input
                 type="text"
-                placeholder="Phone Number (Optional)"
+                placeholder="Phone Number (Saved automatically)"
                 value={customerInfo.phone}
-                onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
                 className="bg-slate-900 border border-slate-800 text-white text-xs px-3.5 py-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
             </div>
