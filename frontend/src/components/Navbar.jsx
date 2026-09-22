@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Store, MapPin, Heart, ShoppingBag, PhoneCall, Sun, Moon, Globe, Scale } from 'lucide-react';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
