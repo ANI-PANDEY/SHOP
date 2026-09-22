@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { Store, MapPin, Heart, ShoppingBag, PhoneCall, Sun, Moon, Globe } from 'lucide-react';
+import { Store, MapPin, Heart, ShoppingBag, PhoneCall, Sun, Moon, Globe, Scale } from 'lucide-react';
 import useCartStore from '../store/useCartStore';
 import useWishlistStore from '../store/useWishlistStore';
 import { useTheme } from '../context/ThemeContext';
@@ -7,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 import AnnouncementBar from './AnnouncementBar';
 
-const Navbar = ({ onOpenWishlistModal }) => {
+const Navbar = ({ onOpenWishlistModal, onOpenCalculatorModal }) => {
   const { cartItems } = useCartStore();
   const { wishlistItems } = useWishlistStore();
   const { theme, toggleTheme } = useTheme();
@@ -62,24 +61,17 @@ const Navbar = ({ onOpenWishlistModal }) => {
                 <span>{language === 'en' ? 'EN' : 'हिंदी'}</span>
               </button>
 
-              {/* Theme Toggle Button (Light / Dark) */}
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 font-bold text-xs transition-all"
-                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              >
-                {theme === 'dark' ? (
-                  <>
-                    <Sun size={15} />
-                    <span className="hidden sm:inline">Light</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon size={15} />
-                    <span className="hidden sm:inline">Dark</span>
-                  </>
-                )}
-              </button>
+              {/* Scale / Custom Rupee Quantity Calculator Button */}
+              {onOpenCalculatorModal && (
+                <button
+                  onClick={onOpenCalculatorModal}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-amber-500/40 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-extrabold text-xs transition-all shadow-sm"
+                  title="Kirana Scale & ₹ Amount Calculator / वज़न कैलकुलेटर"
+                >
+                  <Scale size={15} />
+                  <span className="hidden sm:inline">{language === 'hi' ? 'वज़न कैलकुलेटर' : 'Scale Calc'}</span>
+                </button>
+              )}
 
               {/* Direct Order via WhatsApp */}
               <a

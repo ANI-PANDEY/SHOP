@@ -9,12 +9,14 @@ import Profile from './pages/Profile';
 import Feedback from './pages/Feedback';
 import Admin from './pages/Admin';
 import WishlistModal from './components/WishlistModal';
+import KiranaQuantityCalculatorModal from './components/KiranaQuantityCalculatorModal';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
-import { MapPin, PhoneCall, Heart, Store } from 'lucide-react';
+import { MapPin, PhoneCall, Heart, Store, Scale } from 'lucide-react';
 
 function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   return (
     <LanguageProvider>
@@ -24,6 +26,7 @@ function App() {
             
             <Navbar 
               onOpenWishlistModal={() => setIsWishlistOpen(true)}
+              onOpenCalculatorModal={() => setIsCalculatorOpen(true)}
             />
 
             <main className="flex-1 w-full">
@@ -115,7 +118,7 @@ function App() {
               href="https://wa.me/918877002297?text=Hi%20Pandey%20Store,%20I%20want%20to%20place%20an%20order."
               target="_blank"
               rel="noreferrer"
-              className="fixed bottom-5 left-5 z-50 flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all hover:scale-110 border-2 border-emerald-400 animate-bounce text-xs"
+              className="fixed bottom-5 left-5 z-40 flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all hover:scale-105 border-2 border-emerald-400 animate-bounce text-xs"
               title="Order on WhatsApp"
             >
               <svg className="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24">
@@ -124,8 +127,19 @@ function App() {
               <span className="font-black tracking-wide hidden sm:inline">Order via WhatsApp</span>
             </a>
 
-            {/* Wishlist Overlay Modal */}
+            {/* Floating Quick Scale / Rupee Calculator Widget for Mobile & Desktop */}
+            <button
+              onClick={() => setIsCalculatorOpen(true)}
+              className="fixed bottom-5 right-5 z-40 flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all hover:scale-110 border-2 border-amber-300 text-xs"
+              title="Kirana Scale & ₹ Amount Calculator"
+            >
+              <Scale size={18} />
+              <span className="font-black tracking-wide">₹ Calc</span>
+            </button>
+
+            {/* Modals */}
             <WishlistModal isOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} />
+            <KiranaQuantityCalculatorModal isOpen={isCalculatorOpen} onClose={() => setIsCalculatorOpen(false)} />
           </div>
         </Router>
       </ThemeProvider>
